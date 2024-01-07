@@ -12,6 +12,9 @@ class cityDaysForecast:
             data_location = LocationCity().cityLocation(city=city, state=state)
             print(data_location)
             
+            if data_location is None:
+                return {}
+            
         except Exception as e:
             print(f"Ocorreu um erro: {e}")
 
@@ -23,8 +26,8 @@ class cityDaysForecast:
             
             try:
                 data = DailyWeatherData().dailyData(
-                        city='Missal', 
-                        data_location=2308465, 
+                        city=city, 
+                        data_location=data_location, 
                         day=i)
 
                 day_forecast_list.append(data)

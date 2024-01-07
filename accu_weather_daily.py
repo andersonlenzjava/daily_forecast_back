@@ -11,7 +11,7 @@ class DailyWeatherData:
         
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
         link = f"https://www.accuweather.com/pt/br/{city}/{data_location}/daily-weather-forecast/{data_location}?day={day}"
-
+        
         requisicao = requests.get(link, headers=headers)
         site = BeautifulSoup(requisicao.text, "html.parser")
         # print(site.prettify())
