@@ -33,7 +33,7 @@ class LocationCity:
         campo_pesquisa.send_keys(f"{city},{state}")
         campo_pesquisa.send_keys(Keys.ENTER)
         time.sleep(1)
-        print("URL da página redirecionada:", navegador.current_url)
+        # print("URL da página redirecionada:", navegador.current_url)
 
         data_location = 0
         data_location_url = 0
@@ -44,7 +44,7 @@ class LocationCity:
             pattern = r'/(\d+)/weather-forecast/\d+'
             match = re.search(pattern, navegador.current_url)
             numero_extraido = match.group(1) if match else None
-            print("Número extraído:", numero_extraido)
+            # print("Número extraído:", numero_extraido)
             data_location_url = numero_extraido
             
         except Exception as e:
@@ -58,15 +58,15 @@ class LocationCity:
                 # TRATAR PARA VER SE PODE SER NONE
             if div_locations_list:
                 tags_a = div_locations_list.find_all('a') # type: ignore
-                print(tags_a[0].get('href'))
+                # print(tags_a[0].get('href'))
                 
                 if tags_a:
                     pattern = r'\bkey=([^&]*)'
                     match = re.search(pattern, tags_a[0].get('href'))
                     valor_da_key = match.group(1) if match else None
-                    print("Valor da chave 'key':", valor_da_key)
+                    # print("Valor da chave 'key':", valor_da_key)
                     data_location_ahref = valor_da_key
-                    print("href", data_location_ahref)
+                    # print("href", data_location_ahref)
                 
         except Exception as e:
             print(f"Ocorreu um erro: {e}")

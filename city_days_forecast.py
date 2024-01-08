@@ -32,11 +32,10 @@ class cityDaysForecast:
 
                 day_forecast_list.append(data)
 
-                print(data)
             except Exception as e:
                 print(f"Ocorreu um erro: {e}")
                 
-        print(day_forecast_list)
+        # print(day_forecast_list)
     
         return {
             "city": city,
