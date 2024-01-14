@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 class DailyWeatherData:
     """
@@ -19,15 +20,36 @@ class DailyWeatherData:
         # print(site.prettify())
         
         data = site.find('span', class_="short-date")
-        pesquisa = site.find_all("p", class_="panel-item")
+        precipitacao_list = site.find_all("p", class_="panel-item")
+        temperature_previsao = site.find('div', class_="row first")
+        phrase_forecast_day = site.find_all("div", class_="phrase")
 
         # Filtrar os itens que contêm "Precipitação"
-        itens_precipitacao = [item for item in pesquisa if "Precipitação" in item]
+        itens_precipitacao = [item for item in precipitacao_list if "Precipitação" in item]
 
         # Imprimir os itens filtrados
         # for item in itens_precipitacao:
         #     print(item)
-
+        
+#-------------------------------------------------------------------------------------------
+# trata a mensagem de previsão do dia 
+        conteudos = [div.text for div in phrase_forecast_day]
+        
+        nebulosidade_dia = ''
+        nebulosidade_noite = ''
+        
+        if conteudos is not None:
+            nebulosidade_dia = conteudos[0]
+            
+            if len(conteudos) > 1:
+                nebulosidade_noite = conteudos[1]
+            else:
+                nebulosidade_noite = ''
+# -------------------------------------------------------------------------------------------    
+# trata os valores de temperatura 
+        temperatures = []
+        if temperature_previsao:
+            temperatures = temperature_previsao.find_all('div', class_='temperature')
 # -------------------------------------------------------------------------------------------
 # pega os valores de precipitação do dia
         valores_spans = []
@@ -47,10 +69,10 @@ class DailyWeatherData:
         
         if data is not None:
 
-            mm_manha = valores_spans[0].split()[0]
+            mm_manha = float(valores_spans[0].split()[0])
             
             if len(valores_spans) > 1:
-                mm_tarde = valores_spans[1].split()[0]
+                mm_tarde = float(valores_spans[1].split()[0])
             else:
                 mm_tarde = 0
             
@@ -59,7 +81,12 @@ class DailyWeatherData:
                 "dia": data.text.strip(),
                 "mm_manha": mm_manha,
                 "mm_tarde": mm_tarde,
-                "mm_dia": format(float(mm_manha) + float(mm_tarde), '.1f'),
+                "mm_dia": float(format(mm_manha + mm_tarde, '.1f')),
+                "temp_max": int(re.sub(r'°', '', temperatures[0].text)),
+                "temp_min": int(re.sub(r'°', '', temperatures[1].text)),
+                "unidade": "°C",
+                "nebulosidade_dia": nebulosidade_dia,
+                "nebulosidade_noite": nebulosidade_noite
             }
 
         return consulta_dia

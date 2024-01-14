@@ -1,5 +1,5 @@
-from accu_weather_daily import DailyWeatherData
-from accu_weather_location import LocationCity
+from src.service.Accu_Wheater_Forecast.accu_weather_daily import DailyWeatherData
+from src.service.Accu_Wheater_Forecast.accu_weather_location import LocationCity
 
 
 class cityDaysForecast:
@@ -22,7 +22,10 @@ class cityDaysForecast:
 
         day_forecast_list = []
         
-        for i in range(days):
+        print(days)
+        
+        for i in range(1, days + 1):
+            print(i)
             
             try:
                 data = DailyWeatherData().dailyData(
