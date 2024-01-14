@@ -12,6 +12,8 @@ class DailyWeatherData:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
         link = f"https://www.accuweather.com/pt/br/{city}/{data_location}/daily-weather-forecast/{data_location}?day={day}"
         
+        print(link)
+        
         requisicao = requests.get(link, headers=headers)
         site = BeautifulSoup(requisicao.text, "html.parser")
         # print(site.prettify())
@@ -44,12 +46,20 @@ class DailyWeatherData:
         consulta_dia = {}
         
         if data is not None:
+
+            mm_manha = valores_spans[0].split()[0]
+            
+            if len(valores_spans) > 1:
+                mm_tarde = valores_spans[1].split()[0]
+            else:
+                mm_tarde = 0
+            
             # criação do objeto            
             consulta_dia = {
                 "dia": data.text.strip(),
-                "mm_manha": valores_spans[0].split()[0],
-                "mm_tarde": valores_spans[1].split()[0],
-                "mm_dia": format(float(valores_spans[0].split()[0]) + float(valores_spans[1].split()[0]), '.1f'),
+                "mm_manha": mm_manha,
+                "mm_tarde": mm_tarde,
+                "mm_dia": format(float(mm_manha) + float(mm_tarde), '.1f'),
             }
 
         return consulta_dia
