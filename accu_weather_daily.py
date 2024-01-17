@@ -23,6 +23,11 @@ class DailyWeatherData:
         precipitacao_list = site.find_all("p", class_="panel-item")
         temperature_previsao = site.find('div', class_="row first")
         phrase_forecast_day = site.find_all("div", class_="phrase")
+        content_week_day = site.find_all("div", class_="subnav-pagination")
+
+        # print("content_week_day", content_week_day)
+        
+        # print(type(content_week_day))
 
         # Filtrar os itens que contêm "Precipitação"
         itens_precipitacao = [item for item in precipitacao_list if "Precipitação" in item]
@@ -51,6 +56,24 @@ class DailyWeatherData:
         if temperature_previsao:
             temperatures = temperature_previsao.find_all('div', class_='temperature')
 # -------------------------------------------------------------------------------------------
+# trata das mensagens do dia da semana
+        day_of_week_content = ''
+        
+        try:
+            # Use regex para encontrar o conteúdo da div com o dia da semana
+            match = re.search(r'<div>(.*?),', str(content_week_day), re.DOTALL)
+
+            # Se houver uma correspondência, imprima o conteúdo
+            if match:
+                day_of_week_content = match.group(1)
+                # print(day_of_week_content)
+            else:
+                print("Div com o dia da semana não encontrada.")
+        except Exception as e:
+            print(f"Ocorreu um erro: {e}")
+        
+# -------------------------------------------------------------------------------------------
+
 # pega os valores de precipitação do dia
         valores_spans = []
 
@@ -79,6 +102,7 @@ class DailyWeatherData:
             # criação do objeto            
             consulta_dia = {
                 "dia": data.text.strip(),
+                "dia_semana": day_of_week_content,
                 "mm_manha": mm_manha,
                 "mm_tarde": mm_tarde,
                 "mm_dia": float(format(mm_manha + mm_tarde, '.1f')),

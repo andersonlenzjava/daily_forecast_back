@@ -42,7 +42,7 @@ class cityDaysForecast:
     
         return {
             "city": city,
-            "State": state,
-            "Daily_forecast": day_forecast_list
+            "state": state,
+            "daily_forecast": day_forecast_list
         }
         
